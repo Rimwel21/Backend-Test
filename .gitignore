@@ -1,0 +1,19 @@
+# virtual environments
+venv/
+
+#environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Database files (SQLite)
+*.db
+*.sqlite3
+database/*.db
+
+# Alembic
+alembic/versions/__pycache__/
