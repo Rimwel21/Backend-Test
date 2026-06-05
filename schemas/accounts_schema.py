@@ -11,9 +11,21 @@ class StudentRegister(BaseModel):
     username: str
     password: str
 
+class StudentLogin(BaseModel):
+    username: str
+    password: str
+
 class TeacherRegister(BaseModel):
     email: EmailStr
     password: str
+
+class TeacherLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str
 
 class AccountResponse(BaseModel):
     id: int
