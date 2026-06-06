@@ -13,12 +13,10 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 def student_register(student: StudentRegister, db: Session = Depends(get_db)):
     
     db_student = db.query(Accounts).filter(Accounts.username == student.username).first()
-    
 
     if db_student:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="student username already exists!")
     
-
     new_student = Accounts(
         username=student.username,
         hashed_password=hash_password(student.password),
@@ -45,7 +43,7 @@ def student_login(student: StudentLogin, db: Session = Depends(get_db)):
     if not verify_password(student.password, db_student.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password!")
     
-    # check is user is student
+    # check if user is student
     if db_student.role != RoleEnum.student:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a student account!")
     
@@ -61,6 +59,5 @@ def student_login(student: StudentLogin, db: Session = Depends(get_db)):
         "access_token": access_token,
         "token_type": "bearer"
     }
-
 
 

@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes.accounts_route import router as studentAuth
 
+
 app = FastAPI()
 
 # origins = [] lalagyan kopa, kung sino lang pwede maka access pag frontend
