@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes.accounts_route import router as student_auth
+from routes.accounts_route import router as account_auth
 from routes.refresh_token import router as refresh_router
 
 app = FastAPI()
@@ -15,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-app.include_router(student_auth)
+app.include_router(account_auth)
 app.include_router(refresh_router)
 
 @app.get("/")
