@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
 from enum import Enum
 
@@ -7,21 +7,16 @@ class RoleEnum(str, Enum):
     teacher = "teacher"
     admin = "admin"
 
-class StudentRegister(BaseModel):
-    username: str
-    password: str
+class AccountRegister(BaseModel):
+    username: str | None = None
+    email: EmailStr | None = None
+    password: str = Field(min_length=8, max_length=30)
+    role: RoleEnum
 
-class StudentLogin(BaseModel):
-    username: str
-    password: str
-
-class TeacherRegister(BaseModel):
-    email: EmailStr
-    password: str
-
-class TeacherLogin(BaseModel):
-    email: EmailStr
-    password: str
+class AccountLogin(BaseModel):
+    username: str | None = None
+    email: EmailStr | None = None
+    password: str = Field(min_length=8, max_length=30)
 
 class TokenResponse(BaseModel):
     access_token: str
@@ -30,7 +25,7 @@ class TokenResponse(BaseModel):
 class AccountResponse(BaseModel):
     id: int
     username: str | None
-    email: str | None
+    email: EmailStr | None
     role: RoleEnum
     created_at: datetime
     updated_at: datetime

@@ -3,12 +3,13 @@ from jose import jwt, JWTError, ExpiredSignatureError
 from sqlalchemy.orm import Session
 from database.dependencies import get_db
 from models.accounts import Accounts
+from schemas.accounts_schema import TokenResponse
 from auth.account_auth import create_access_token
 from core.config import settings
 
 router = APIRouter(prefix="/api", tags=["RefreshToken"])
 
-@router.post("/refresh")
+@router.post("/refresh", response_model=TokenResponse)
 def refresh_token(request: Request, db: Session = Depends(get_db)):
     token = request.cookies.get("refresh_token")
 
@@ -36,16 +37,20 @@ def refresh_token(request: Request, db: Session = Depends(get_db)):
 
         new_access_token = create_access_token(
             data={
-                "sub": str(user_id)
+                "sub": str(user_id),
+                "username": user.username,
+                "email": user.email,
+                "role": user.role
             }            
         )
 
         return {
-            "access_token": new_access_token
+            "access_token": new_access_token,
+            "token_type": "bearer"
         }
 
     except ExpiredSignatureError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="token expired!")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired")
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
     

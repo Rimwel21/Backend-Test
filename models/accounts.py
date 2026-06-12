@@ -25,3 +25,5 @@ class Accounts(Base):
     created_at = Column(DateTime(timezone=True), default=utc_now, nullable=False)
 
     updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now, nullable=False)
+
+

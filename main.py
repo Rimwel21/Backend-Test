@@ -5,7 +5,9 @@ from routes.refresh_token import router as refresh_router
 
 app = FastAPI()
 
-# origins = [] lalagyan kopa, kung sino lang pwede maka access pag frontend
+origins = [
+    "http://localhost:5173/"
+] 
 
 app.add_middleware(
     CORSMiddleware,
