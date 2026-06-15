@@ -4,11 +4,11 @@ from utils.dependencies import get_db, get_current_user
 from utils.enum import RoleEnum
 from models.student_profile import StudentProfile
 from models.accounts import Accounts
-from schemas.student_profile_schema import StudentProfileCreate, StudentProfileUpdate, StudentProfileOut
+from schemas.student_profile_schema import StudentProfileCreate, StudentProfileOut
 
-router = APIRouter(prefix="/student", tags=["Student-Profile"])
+router = APIRouter(prefix="/profile", tags=["Profiling"])
 
-@router.post("/profile", response_model=StudentProfileOut)
+@router.post("/student", response_model=StudentProfileOut)
 def create_profile(student: StudentProfileCreate, db: Session = Depends(get_db), current_user: Accounts = Depends(get_current_user)):
     if current_user.role != RoleEnum.student:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Student only")
@@ -32,5 +32,3 @@ def create_profile(student: StudentProfileCreate, db: Session = Depends(get_db),
     db.refresh(new_student_profile)
 
     return new_student_profile
-
-

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes.accounts_route import router as account_auth
 from routes.refresh_token import router as refresh_router
-from routes.student_profile_route import router as student_profile
+from routes.profile_route import router as account_profile
 
 app = FastAPI()
 
@@ -19,7 +19,7 @@ app.add_middleware(
 )
 
 app.include_router(account_auth)
-app.include_router(student_profile)
+app.include_router(account_profile)
 app.include_router(refresh_router)
 
 @app.get("/")
