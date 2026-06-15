@@ -1,11 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
-from enum import Enum
+from utils.enum import RoleEnum
 
-class RoleEnum(str, Enum):
-    student = "student"
-    teacher = "teacher"
-    admin = "admin"
 
 class AccountRegister(BaseModel):
     username: str | None = None

@@ -23,6 +23,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from models.accounts import Accounts
+from models.student_profile import StudentProfile
 from database.connection import Base
 target_metadata = Base.metadata
 

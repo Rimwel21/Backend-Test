@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Request
 from jose import jwt, JWTError, ExpiredSignatureError
 from sqlalchemy.orm import Session
-from database.dependencies import get_db
+from utils.dependencies import get_db
 from models.accounts import Accounts
 from schemas.accounts_schema import TokenResponse
 from auth.account_auth import create_access_token

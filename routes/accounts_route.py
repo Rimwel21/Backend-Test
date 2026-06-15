@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
-from database.dependencies import get_db
+from utils.dependencies import get_db
 from auth.account_auth import hash_password, verify_password, create_access_token, create_refresh_token
 from models.accounts import Accounts
-from schemas.accounts_schema import AccountRegister, AccountLogin, AccountResponse, RoleEnum, TokenResponse
+from utils.enum import RoleEnum
+from schemas.accounts_schema import AccountRegister, AccountLogin, AccountResponse,TokenResponse
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 # Account Registration
