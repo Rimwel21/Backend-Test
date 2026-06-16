@@ -22,6 +22,8 @@ class Accounts(Base):
 
     student_profile = relationship("StudentProfile", back_populates="student_account", passive_deletes=True, uselist=False)
 
+    teacher_profile = relationship("TeacherProfile", back_populates="teacher_account", passive_deletes=True, uselist=False)
+
     created_at = Column(DateTime(timezone=True), default=utc_now, nullable=False)
 
     updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now, nullable=False)

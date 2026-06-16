@@ -4,6 +4,7 @@ from utils.dependencies import get_db
 from auth.account_auth import hash_password, verify_password, create_access_token, create_refresh_token
 from models.accounts import Accounts
 from models.student_profile import StudentProfile
+from models.teacher_profile import TeacherProfile
 from utils.enum import RoleEnum
 from schemas.accounts_schema import AccountRegister, AccountLogin, AccountResponse,TokenResponse
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -99,6 +100,13 @@ def account_login(user: AccountLogin, response: Response, db: Session = Depends(
     # Student check if profile exists
     if db_account.role == RoleEnum.student:
         profile = db.query(StudentProfile).filter(StudentProfile.account_id == db_account.id).first()
+
+        # chinecheck nito si user na nag lologin kung meron nabang profile
+        profile_completed = profile is not None
+
+    # check teacher profile if exists
+    if db_account.role == RoleEnum.teacher:
+        profile = db.query(TeacherProfile).filter(TeacherProfile.account_id == db_account.id).first()
 
         profile_completed = profile is not None
 
