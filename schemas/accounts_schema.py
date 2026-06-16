@@ -4,14 +4,14 @@ from utils.enum import RoleEnum
 
 
 class AccountRegister(BaseModel):
-    username: str | None = None
-    email: EmailStr | None = None
+    username: str | None = Field(None, min_length=5, max_length=50)
+    email: EmailStr | None = Field(None, min_length=5, max_length=50)
     password: str = Field(min_length=8, max_length=30)
     role: RoleEnum
 
 class AccountLogin(BaseModel):
-    username: str | None = None
-    email: EmailStr | None = None
+    username: str | None = Field(None, min_length=5, max_length=50)
+    email: EmailStr | None = Field(None, min_length=5, max_length=50)
     password: str = Field(min_length=8, max_length=30)
 
 class TokenResponse(BaseModel):

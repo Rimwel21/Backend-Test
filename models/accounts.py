@@ -9,10 +9,10 @@ class Accounts(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    username = Column(String(100), unique=True, nullable=True, index=True)
+    username = Column(String(50), unique=True, nullable=True, index=True)
     # username for students only
 
-    email = Column(String(100), unique=True, nullable=True, index=True)
+    email = Column(String(50), unique=True, nullable=True, index=True)
     # email only for teacher and admin
     
     hashed_password = Column(String(255), nullable=False)

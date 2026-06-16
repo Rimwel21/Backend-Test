@@ -8,5 +8,5 @@ class RoleEnum(str, Enum):
     
 # student type enum:
 class StudentType(str, Enum):
-    regular = "Regular"
-    HI = "Hearing Impaired"
+    regular = "regular"
+    HI = "hearing impaired"

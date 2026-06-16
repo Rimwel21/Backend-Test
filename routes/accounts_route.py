@@ -7,7 +7,7 @@ from utils.enum import RoleEnum
 from schemas.accounts_schema import AccountRegister, AccountLogin, AccountResponse,TokenResponse
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
-# Account Registration
+# Account Registration routes
 @router.post("/account/register", response_model=AccountResponse)
 def account_register(user: AccountRegister, db: Session = Depends(get_db)):
 
@@ -42,6 +42,7 @@ def account_register(user: AccountRegister, db: Session = Depends(get_db)):
 
     return new_account
 
+# Account Login routes
 @router.post("/account/login", response_model=TokenResponse)
 def account_login(user: AccountLogin, response: Response, db: Session = Depends(get_db)):
 
