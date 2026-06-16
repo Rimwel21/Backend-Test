@@ -26,6 +26,7 @@ class StudentProfileOut(BaseModel):
     guardians_name: str | None = None
     guardians_contact_no: str | None = None
     address: str | None = None
+    status: bool
     created_at: datetime
     updated_at: datetime
 

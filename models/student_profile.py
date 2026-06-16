@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Enum, DateTime
+from sqlalchemy import Column, Integer, String,Boolean, ForeignKey, Enum, DateTime
 from sqlalchemy.orm import relationship
 from database.connection import Base
 from utils.utc_now import utc_now
@@ -24,6 +24,8 @@ class StudentProfile(Base):
     guardians_contact_no = Column(String(20), nullable=True)
 
     address = Column(String, nullable=True)
+
+    status = Column(Boolean, nullable=False, default=True)
 
     created_at = Column(DateTime(timezone=True), default=utc_now, nullable=False)
 

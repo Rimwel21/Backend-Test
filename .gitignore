@@ -19,4 +19,4 @@ database/*.db
 alembic/versions/__pycache__/
 
 # personal file
-.delete_user.py
+delete_user.py
