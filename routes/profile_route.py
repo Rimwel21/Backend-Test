@@ -24,8 +24,7 @@ def create_profile(student: StudentProfileCreate, db: Session = Depends(get_db),
         student_type=student.student_type,
         guardians_name=student.guardians_name,
         guardians_contact_no=student.guardians_contact_no,
-        address=student.address,
-        status=True
+        address=student.address
     )
 
     db.add(new_student_profile)

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from utils.dependencies import get_db
 from auth.account_auth import hash_password, verify_password, create_access_token, create_refresh_token
 from models.accounts import Accounts
+from models.student_profile import StudentProfile
 from utils.enum import RoleEnum
 from schemas.accounts_schema import AccountRegister, AccountLogin, AccountResponse,TokenResponse
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -93,8 +94,16 @@ def account_login(user: AccountLogin, response: Response, db: Session = Depends(
         max_age=7 * 24 * 60 * 60,
         path="/api/refresh"
     )
+    profile_completed = False
+
+    # Student check if profile exists
+    if db_account.role == RoleEnum.student:
+        profile = db.query(StudentProfile).filter(StudentProfile.account_id == db_account.id).first()
+
+        profile_completed = profile is not None
 
     return {
         "access_token": access_token,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "profile_completed": profile_completed
     }

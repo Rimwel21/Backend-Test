@@ -17,6 +17,7 @@ class AccountLogin(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
+    profile_completed: bool
 
 class AccountResponse(BaseModel):
     id: int
