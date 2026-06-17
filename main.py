@@ -1,10 +1,27 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from routes.accounts_route import router as account_auth
 from routes.refresh_token import router as refresh_router
 from routes.profile_route import router as account_profile
+from limiter import limiter
 
 app = FastAPI()
+
+
+app.state.limiter = limiter
+app.add_middleware(SlowAPIMiddleware)
+
+@app.exception_handler(RateLimitExceeded)
+async def custom_limit_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={
+            "detail": "Too many requests. Please try again later."
+        }
+    )
 
 origins = [
     "http://localhost:5173/"

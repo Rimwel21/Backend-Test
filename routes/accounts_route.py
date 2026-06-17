@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from sqlalchemy.orm import Session
 from utils.dependencies import get_db
 from auth.account_auth import hash_password, verify_password, create_access_token, create_refresh_token
@@ -7,11 +7,14 @@ from models.student_profile import StudentProfile
 from models.teacher_profile import TeacherProfile
 from utils.enum import RoleEnum
 from schemas.accounts_schema import AccountRegister, AccountLogin, AccountResponse,TokenResponse
+from limiter import limiter
+
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 # Account Registration routes
 @router.post("/account/register", response_model=AccountResponse)
-def account_register(user: AccountRegister, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def account_register(user: AccountRegister, request: Request, db: Session = Depends(get_db)):
 
     if user.role == RoleEnum.student:
         if not user.username:
@@ -46,7 +49,8 @@ def account_register(user: AccountRegister, db: Session = Depends(get_db)):
 
 # Account Login routes
 @router.post("/account/login", response_model=TokenResponse)
-def account_login(user: AccountLogin, response: Response, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def account_login(user: AccountLogin, request:Request, response: Response, db: Session = Depends(get_db)):
 
     if not user.username and not user.email:
         raise HTTPException(
