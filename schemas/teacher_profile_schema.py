@@ -17,6 +17,7 @@ class TeacherProfileUpdate(BaseModel):
 class TeacherProfileOut(BaseModel):
     id: int
     account_id: int
+    profile_image_id: int | None = None
     name: str
     contact_no: str
     email_address: EmailStr

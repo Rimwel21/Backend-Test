@@ -23,6 +23,8 @@ class StudentProfileOut(BaseModel):
     id: int
     name: str
     student_type: StudentType
+    account_id: int
+    profile_image_id: int | None = None
     guardians_name: str | None = None
     guardians_contact_no: str | None = None
     address: str | None = None

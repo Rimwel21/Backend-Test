@@ -41,7 +41,6 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(oauth2_
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
         
-        
     user = db.query(Accounts).filter(Accounts.id == user_id).first()
 
     if not user:

@@ -10,3 +10,7 @@ class RoleEnum(str, Enum):
 class StudentType(str, Enum):
     regular = "regular"
     HI = "hearing impaired"
+
+class FileCategory(str, Enum):
+    PROFILE_IMAGE = "PROFILE_IMAGE"
+    LEARNING_MATERIAL = "LEARNING_MATERIAL"

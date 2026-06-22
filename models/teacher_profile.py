@@ -8,9 +8,15 @@ class TeacherProfile(Base):
 
     id = Column(Integer, primary_key=True, nullable=False, index=True)
 
+    # one to one relationship sa accounts table
     account_id = Column(Integer, ForeignKey("accounts.id", ondelete="CASCADE"), nullable=False, unique=True, index=True)
 
     teacher_account = relationship("Accounts", back_populates="teacher_profile")
+
+    # one to one relationship sa file table
+    profile_image_id = Column(Integer, ForeignKey("files.id", ondelete="SET NULL"), unique=True, nullable=True, index=True)
+
+    image_file = relationship("FileUpload", back_populates="teacher_image")
 
     name = Column(String(50), nullable=False)
 

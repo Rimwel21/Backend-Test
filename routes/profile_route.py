@@ -1,61 +1,83 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, UploadFile,File, Request
 from sqlalchemy.orm import Session
 from utils.dependencies import get_db, get_current_user
-from utils.enum import RoleEnum
-from models.student_profile import StudentProfile
-from models.teacher_profile import TeacherProfile
+from services.student_profile_service import create_student_profile, update_student_profile
+from services.teacher_profile_service import create_teacher_profile, update_teacher_profile
 from models.accounts import Accounts
-from schemas.student_profile_schema import StudentProfileCreate, StudentProfileOut
-from schemas.teacher_profile_schema import TeacherProfileCreate, TeacherProfileOut
+from schemas.student_profile_schema import StudentProfileCreate, StudentProfileOut, StudentProfileUpdate
+from schemas.teacher_profile_schema import TeacherProfileCreate, TeacherProfileOut, TeacherProfileUpdate
+from schemas.file_schema import FileOut
+from services.image_profile_service import upload_image_profile, delete_image_profile
+from limiter import limiter
 
 router = APIRouter(prefix="/profile", tags=["Profiling"])
 
-@router.post("/student", response_model=StudentProfileOut)
-def create_student_profile(student: StudentProfileCreate, db: Session = Depends(get_db), current_user: Accounts = Depends(get_current_user)):
-    if current_user.role != RoleEnum.student:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Student only")
-    
-    existing_profile = db.query(StudentProfile).filter(StudentProfile.account_id == current_user.id).first()
+# router for GET profile and image profile
 
-    if existing_profile:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Student profile already exists")
 
-    new_student_profile = StudentProfile(
-        name=student.name,
-        account_id=current_user.id,
-        student_type=student.student_type,
-        guardians_name=student.guardians_name,
-        guardians_contact_no=student.guardians_contact_no,
-        address=student.address
+# route for image upload profile
+@router.put("/image/upload", response_model=FileOut)
+@limiter.limit("5/minute")
+async def upload_image_profile_route(request: Request, image: UploadFile = File(...), db: Session = Depends(get_db), current_user: Accounts = Depends(get_current_user)):
+
+    return await upload_image_profile(
+        request=request,
+        image=image,
+        db=db,
+        current_user=current_user
     )
 
-    db.add(new_student_profile)
-    db.commit()
-    db.refresh(new_student_profile)
-
-    return new_student_profile
-
-@router.post("/teacher", response_model=TeacherProfileOut)
-def create_teacher_profile(teacher: TeacherProfileCreate, db: Session = Depends(get_db), current_user: Accounts = Depends(get_current_user)):
-    if current_user.role != RoleEnum.teacher:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Teacher only")
-    
-    existing_profile = db.query(TeacherProfile).filter(TeacherProfile.account_id == current_user.id).first()
-
-    if existing_profile:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Teacher profile already exists")
-    
-    new_teacher_profile = TeacherProfile(
-        account_id=current_user.id,
-        name=teacher.name,
-        contact_no=teacher.contact_no,
-        email_address=current_user.email,
-        address=teacher.address,
+# student profile setup
+@router.post("/student/create", response_model=StudentProfileOut)
+@limiter.limit("5/minute")
+def create_student_profile_route(request:Request, student: StudentProfileCreate, db: Session = Depends(get_db), current_user: Accounts = Depends(get_current_user)):
+    return create_student_profile(
+        request=request,
+        student=student,
+        db=db,
+        current_user=current_user
     )
 
-    db.add(new_teacher_profile)
-    db.commit()
-    db.refresh(new_teacher_profile)
+# update student profile
+@router.patch("/student/update", response_model=StudentProfileOut)
+@limiter.limit("5/minute")
+def update_student_profile_route(request: Request, update: StudentProfileUpdate, db: Session = Depends(get_db), current_user: Accounts = Depends(get_current_user)):
+    return update_student_profile(
+        request=request,
+        update=update,
+        db=db,
+        current_user=current_user
+    )
 
-    return new_teacher_profile
+# teacher profile setup
+@router.post("/teacher/create", response_model=TeacherProfileOut)
+@limiter.limit("5/minute")
+def create_teacher_profile_route(request: Request, teacher: TeacherProfileCreate, db: Session = Depends(get_db), current_user: Accounts = Depends(get_current_user)):
+    return create_teacher_profile(
+        request=request,
+        teacher=teacher,
+        db=db,
+        current_user=current_user
+    )
+
+@router.post("/teacher/update")
+@limiter.limit("5/minute")
+def update_teacher_profile_route(request: Request, update: TeacherProfileUpdate, db: Session = Depends(get_db), current_user: Accounts = Depends(get_current_user)):
+    return update_teacher_profile(
+        request=request,
+        update=update,
+        db=db,
+        current_user=current_user
+    )
+
+
+# image deletion
+@router.delete("/image/delete")
+@limiter.limit("5/minute")
+async def delete_image_profile_route(request: Request, db: Session = Depends(get_db), current_user: Accounts = Depends(get_current_user)):
+    return await delete_image_profile(
+        request=request,
+        db=db,
+        current_user=current_user
+    )
 

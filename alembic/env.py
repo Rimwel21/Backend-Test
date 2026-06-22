@@ -22,10 +22,11 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
+from database.connection import Base
 from models.accounts import Accounts
 from models.student_profile import StudentProfile
 from models.teacher_profile import TeacherProfile
-from database.connection import Base
+from models.file_upload import FileUpload
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -46,8 +47,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-   
-    url = config.get_main_option("sqlalchemy.url")
+    url = settings.database_url
     context.configure(
         url=url,
         target_metadata=target_metadata,

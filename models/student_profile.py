@@ -13,11 +13,15 @@ class StudentProfile(Base):
 
     student_type = Column(Enum(StudentType), nullable=False)
 
+    # one to one relationship sa accounts table
     account_id = Column(Integer, ForeignKey("accounts.id", ondelete="CASCADE"), unique=True, nullable=False, index=True)
 
     student_account = relationship("Accounts", back_populates="student_profile")
 
-    # avatar_upload ("add later, upload image")
+    # one to one relationship sa file table
+    profile_image_id = Column(Integer, ForeignKey("files.id", ondelete="SET NULL"), unique=True, nullable=True, index=True)
+
+    image_file = relationship("FileUpload", back_populates="student_image")
 
     guardians_name = Column(String, nullable=True)
 
