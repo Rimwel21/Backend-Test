@@ -9,7 +9,7 @@ from models.student_profile import StudentProfile
 from models.teacher_profile import TeacherProfile
 
 # image upload and update
-async def upload_image_profile(request: Request, image: UploadFile, db:Session, current_user: Accounts, folder: str):
+async def upload_image_profile(request: Request, image: UploadFile, db:Session, current_user: Accounts):
     if current_user.role == RoleEnum.student:
         profile = db.query(StudentProfile).filter(StudentProfile.account_id == current_user.id).first()
         

@@ -59,4 +59,4 @@ async def get_student_profile(request: Request, db: Session, current_user: Accou
     if not student_profile:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student profile not found")
     
-    
+
