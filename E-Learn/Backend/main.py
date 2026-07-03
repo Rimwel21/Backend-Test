@@ -11,6 +11,9 @@ from routes.teacher_class_route import router as teacher_classes
 from routes.teacher_module_route import router as teacher_modules
 from routes.teacher_assessment_route import router as teacher_assessments
 from routes.student_module_route import router as student_modules
+from routes.handsign_route import router as handsign_router
+from core.handsign_config import get_handsign_settings
+from services.handsign.prediction_service import PredictionService
 from limiter import limiter
 
 app = FastAPI()
@@ -78,6 +81,17 @@ app.include_router(teacher_classes)
 app.include_router(teacher_modules)
 app.include_router(teacher_assessments)
 app.include_router(student_modules)
+app.include_router(handsign_router)
+
+@app.on_event("startup")
+def load_handsign_model():
+    app.state.handsign_prediction_service = PredictionService(get_handsign_settings())
+
+@app.on_event("shutdown")
+def close_handsign_model():
+    service = getattr(app.state, "handsign_prediction_service", None)
+    if service is not None:
+        service.close()
 
 @app.get("/")
 def root():

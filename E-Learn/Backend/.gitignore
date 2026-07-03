@@ -9,6 +9,9 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 # Database files (SQLite)
 *.db
@@ -20,3 +23,23 @@ alembic/versions/__pycache__/
 
 # personal file
 delete_user.py
+
+# Build and generated files
+dist/
+build/
+*.log
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
+
+# Local uploaded/runtime-generated content
+static/pdf_pages/
+uploads/
+
+# Hand sign source/training data that is not needed for inference
+dataset/
+datasets/
+training_images/
+videos/
+recordings/
