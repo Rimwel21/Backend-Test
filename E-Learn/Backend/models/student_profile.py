@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Enum, DateTime
 from sqlalchemy.orm import relationship
 from database.connection import Base
 from utils.utc_now import utc_now
-from utils.enum import StudentType
+from utils.enum import StudentType, GradeLevel, UserSex
 
 class StudentProfile(Base):
     __tablename__ = "student_profiles"
@@ -10,6 +10,14 @@ class StudentProfile(Base):
     id = Column(Integer, primary_key=True, nullable=False, index=True)
 
     name = Column(String, nullable=False)
+
+    age = Column(Integer, nullable=True)
+
+    sex = Column(Enum(UserSex), nullable=True)
+
+    grade_level = Column(Enum(GradeLevel), nullable=True)
+
+    section = Column(String(250), nullable=True)
 
     student_type = Column(Enum(StudentType), nullable=False)
 

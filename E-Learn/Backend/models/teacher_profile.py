@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 from utils.utc_now import utc_now
+from utils.enum import UserSex
 from database.connection import Base
 
 class TeacherProfile(Base):
@@ -19,6 +20,12 @@ class TeacherProfile(Base):
     image_file = relationship("FileUpload", back_populates="teacher_image")
 
     name = Column(String(50), nullable=False)
+
+    age = Column(Integer, default=0, nullable=True)
+
+    sex = Column(Enum(UserSex), nullable=True)
+
+    handle_grade_levels = relationship("TeacherGradeHandles", back_populates="teacher", passive_deletes=True)
 
     contact_no = Column(String(20), nullable=False)
 
