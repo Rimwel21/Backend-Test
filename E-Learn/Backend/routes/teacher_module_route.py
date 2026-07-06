@@ -42,6 +42,7 @@ async def create_teacher_module_upload_route(
     status_value: str = Form("Unpublished"),
     behavior_required: bool = Form(True),
     estimated_time: str | None = Form(None),
+    class_id: int | None = Form(None),
     material_file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: Accounts = Depends(get_current_user)
@@ -55,6 +56,7 @@ async def create_teacher_module_upload_route(
         status_value=status_value,
         behavior_required=behavior_required,
         estimated_time=estimated_time,
+        class_id=class_id,
         material_file=material_file,
         db=db,
         current_user=current_user

@@ -41,4 +41,11 @@ class StudentProfile(Base):
 
     updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now, nullable=False)
 
+    @property
+    def username(self):
+        return self.student_account.username if self.student_account else None
+
+    @property
+    def email(self):
+        return self.student_account.email if self.student_account else None
 

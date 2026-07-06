@@ -8,6 +8,7 @@ class AssessmentQuestion(BaseModel):
 
 
 class TeacherAssessmentBase(BaseModel):
+    class_id: int | None = None
     module_id: int | None = None
     topic_id: int | None = None
     title: str = Field(min_length=1, max_length=120)
@@ -26,6 +27,7 @@ class TeacherAssessmentCreate(TeacherAssessmentBase):
 
 
 class TeacherAssessmentUpdate(BaseModel):
+    class_id: int | None = None
     module_id: int | None = None
     topic_id: int | None = None
     title: str | None = Field(default=None, min_length=1, max_length=120)

@@ -21,7 +21,7 @@ def create_student_profile(request: Request, student: StudentProfileCreate, db: 
         age=student.age,
         sex=student.sex,
         grade_level=student.grade_level,
-        section=student.section,
+        section=_normalize_section(student.section),
         account_id=current_user.id,
         profile_image_id=None,
         student_type=student.student_type,
@@ -47,12 +47,18 @@ def update_student_profile(request: Request,update: StudentProfileUpdate, db: Se
     update_profile = update.model_dump(exclude_unset=True)
 
     for key, value in update_profile.items():
+        if key == "section" and isinstance(value, str):
+            value = _normalize_section(value)
         setattr(student_profile, key, value)
 
     db.commit()
     db.refresh(student_profile)
 
     return student_profile
+
+
+def _normalize_section(section: str):
+    return " ".join(section.strip().split()).upper()
     
 def get_student_profile(request: Request, db: Session, current_user: Accounts):
     if current_user.role != RoleEnum.student:

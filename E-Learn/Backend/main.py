@@ -10,6 +10,7 @@ from routes.profile_route import router as account_profile
 from routes.teacher_class_route import router as teacher_classes
 from routes.teacher_module_route import router as teacher_modules
 from routes.teacher_assessment_route import router as teacher_assessments
+from routes.student_module_route import activities_router as student_activities
 from routes.student_module_route import router as student_modules
 from routes.handsign_route import router as handsign_router
 from core.handsign_config import get_handsign_settings
@@ -81,6 +82,7 @@ app.include_router(teacher_classes)
 app.include_router(teacher_modules)
 app.include_router(teacher_assessments)
 app.include_router(student_modules)
+app.include_router(student_activities)
 app.include_router(handsign_router)
 
 @app.on_event("startup")

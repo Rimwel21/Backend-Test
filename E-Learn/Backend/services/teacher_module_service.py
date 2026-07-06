@@ -44,6 +44,11 @@ def _validate_class_owner(class_id: int | None, db: Session, current_user: Accou
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
 
 
+def _validate_class_assignment(class_id: int | None, status_value: str):
+    if status_value == "Published" and class_id is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Published materials must be assigned to a class")
+
+
 def list_teacher_modules(request: Request, db: Session, current_user: Accounts):
     _ensure_teacher(current_user)
 
@@ -57,6 +62,7 @@ def list_teacher_modules(request: Request, db: Session, current_user: Accounts):
 
 def create_teacher_module(request: Request, module: TeacherModuleCreate, db: Session, current_user: Accounts):
     _ensure_teacher(current_user)
+    _validate_class_assignment(module.class_id, module.status)
     _validate_class_owner(module.class_id, db, current_user)
 
     new_module = TeacherModule(
@@ -91,16 +97,20 @@ async def create_teacher_module_upload(
     status_value: str,
     behavior_required: bool,
     estimated_time: str | None,
+    class_id: int | None,
     material_file: UploadFile,
     db: Session,
     current_user: Accounts
 ):
     _ensure_teacher(current_user)
+    _validate_class_assignment(class_id, status_value)
+    _validate_class_owner(class_id, db, current_user)
     _validate_material_file(material_file)
     saved_path, file_size = _save_material_file(material_file)
 
     new_module = TeacherModule(
         teacher_id=current_user.id,
+        class_id=class_id,
         title=title.strip(),
         description=description.strip(),
         content_type=content_type.strip(),
@@ -152,6 +162,9 @@ def get_teacher_module(request: Request, module_id: int, db: Session, current_us
 def update_teacher_module(request: Request, module_id: int, update: TeacherModuleUpdate, db: Session, current_user: Accounts):
     module = get_teacher_module(request, module_id, db, current_user)
     update_data = update.model_dump(exclude_unset=True)
+    next_class_id = update_data.get("class_id", module.class_id)
+    next_status = update_data.get("status", module.status)
+    _validate_class_assignment(next_class_id, next_status)
 
     if "class_id" in update_data:
         _validate_class_owner(update.class_id, db, current_user)

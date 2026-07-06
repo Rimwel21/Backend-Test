@@ -11,7 +11,7 @@ class StudentQuizProgress(Base):
 
     id = Column(Integer, primary_key=True, nullable=False, index=True)
     student_id = Column(Integer, ForeignKey("accounts.id", ondelete="CASCADE"), nullable=False, index=True)
-    module_id = Column(Integer, ForeignKey("teacher_modules.id", ondelete="CASCADE"), nullable=False, index=True)
+    module_id = Column(Integer, ForeignKey("teacher_modules.id", ondelete="CASCADE"), nullable=True, index=True)
     assessment_id = Column(Integer, ForeignKey("teacher_assessments.id", ondelete="CASCADE"), nullable=False, index=True)
     status = Column(String(20), default="in_progress", nullable=False)
     score = Column(Integer, nullable=True)

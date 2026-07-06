@@ -9,6 +9,7 @@ class TeacherAssessment(Base):
 
     id = Column(Integer, primary_key=True, nullable=False, index=True)
     teacher_id = Column(Integer, ForeignKey("accounts.id", ondelete="CASCADE"), nullable=False, index=True)
+    class_id = Column(Integer, ForeignKey("teacher_classes.id", ondelete="CASCADE"), nullable=True, index=True)
     module_id = Column(Integer, ForeignKey("teacher_modules.id", ondelete="CASCADE"), nullable=True, index=True)
     topic_id = Column(Integer, ForeignKey("learning_topics.id", ondelete="SET NULL"), nullable=True, index=True)
     assessment_type = Column(String(20), nullable=False, index=True)
@@ -23,6 +24,7 @@ class TeacherAssessment(Base):
     questions = Column(JSON, default=list, nullable=False)
 
     teacher_account = relationship("Accounts", back_populates="teacher_assessments")
+    teacher_class = relationship("TeacherClass")
     module = relationship("TeacherModule", back_populates="assessments")
     topic = relationship("LearningTopic")
 
